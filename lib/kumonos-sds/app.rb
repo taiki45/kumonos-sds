@@ -71,7 +71,7 @@ module KumonosSds
       end
 
       hosts = payload['hosts']
-      unless hosts.class != Array
+      unless hosts.class == Array
         return error_400('`hosts` is missing.')
       end
 
