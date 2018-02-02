@@ -1,0 +1,69 @@
+node:
+  id: book
+  cluster: book
+dynamic_resources:
+  cds_config:
+    api_config_source:
+      cluster_names:
+      - nginx
+      refresh_delay:
+        seconds: 30
+  deprecated_v1:
+    sds_config:
+      api_config_source:
+        cluster_names:
+          - sds
+        refresh_delay:
+          seconds: 30
+static_resources:
+  listeners:
+  - address:
+      socket_address:
+        address: 0.0.0.0
+        port_value: 9211
+    name: egress
+    filter_chains:
+    - filters:
+      - name: envoy.http_connection_manager
+        config:
+          codec_type: AUTO
+          stat_prefix: egress_http
+          access_log:
+          - name: envoy.file_access_log
+            config:
+              path: "/dev/stdout"
+          rds:
+            config_source:
+              api_config_source:
+                cluster_names:
+                - nginx
+                refresh_delay:
+                  seconds: 30
+            route_config_name: default
+          http_filters:
+          - name: envoy.router
+  clusters:
+  - name: nginx
+    type: STRICT_DNS
+    hosts:
+    - socket_address:
+        address: nginx
+        port_value: 80
+    lb_policy: ROUND_ROBIN
+    connect_timeout:
+      seconds: 1
+    dns_lookup_family: V4_ONLY
+  - name: sds
+    connect_timeout: { seconds: 5 }
+    type: STRICT_DNS
+    hosts:
+    - socket_address:
+        address: sds
+        port_value: 8080
+    lb_policy: ROUND_ROBIN
+admin:
+  access_log_path: /dev/null
+  address:
+    socket_address:
+      address: 127.0.0.1
+      port_value: 19000
