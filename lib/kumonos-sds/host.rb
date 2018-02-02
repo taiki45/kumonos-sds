@@ -5,15 +5,20 @@ module KumonosSds
       new(*h.slice(*members).values)
     end
 
+    def tags
+      h = {}
+      h[:az] = az if az
+      h[:canary] = canary if canary
+      h[:load_balancing_weight] = load_balancing_weight if load_balancing_weight
+      h
+    end
+
     def to_h
       h = super
       h.delete(:az)
       h.delete(:canary)
       h.delete(:load_balancing_weight)
-      h[:tags] = {}
-      h[:tags][:az] = az if az
-      h[:tags][:canary] = canary if canary
-      h[:tags][:load_balancing_weight] = load_balancing_weight if load_balancing_weight
+      h[:tags] = tags
       h
     end
 

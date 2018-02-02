@@ -7,14 +7,15 @@ module KumonosSds
 
     # @param [String] service_name
     # @param [Host] host
-    def create(service_name, host)
-      if @mem.has_key?(service_name)
+    def update(service_name, host)
+      if !@mem.has_key?(service_name)
         @mem[service_name] = [host]
       else
-        if @mem[service_name].include?(host)
-          @mem[service_name].delete(host)
+        if (i = @mem[service_name].find_index(host))
+          @mem[service_name][i] = host # update
+        else
+          @mem[service_name] << host # insert
         end
-        @mem[service_name] << host
       end
     end
 
@@ -25,8 +26,9 @@ module KumonosSds
     end
 
     # @param [String] service_name
-    # @param [Array<Host>] hosts
-    def delete(service_name, hosts)
+    # @param [Array] host
+    def delete(service_name, host)
+      @mem[service_name].delete(host)
     end
   end
 end
