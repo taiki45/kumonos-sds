@@ -28,7 +28,9 @@ module KumonosSds
     # @param [String] service_name
     # @param [Array] host
     def delete(service_name, host)
-      @mem[service_name].delete(host)
+      if @mem.has_key?(service_name)
+        @mem[service_name].delete(host)
+      end
     end
   end
 end

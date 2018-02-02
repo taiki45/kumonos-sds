@@ -20,6 +20,9 @@ module KumonosSds
       { error: message }.to_json
     end
 
+    set :raise_errors, true
+    set :show_exceptions, false
+
     get '/v1/registration/:service_name' do
       hosts = @storage.fetch(params[:service_name])
 
@@ -33,7 +36,7 @@ module KumonosSds
     post '/v1/registration/:service_name' do
       begin
         payload = JSON.parse(request.body.read)
-      rescue JSON::ParseError
+      rescue JSON::ParserError
         return error_400('Invalid JSON given.')
       end
 
@@ -58,7 +61,9 @@ module KumonosSds
         @storage.update(params[:service_name], host)
       end
 
-      return 201
+      content_type :json
+      status 201
+      {}.to_json
     end
 
     # expect parameter: { hosts: [host] }
@@ -66,7 +71,7 @@ module KumonosSds
     post '/v1/deregistration/:service_name' do
       begin
         payload = JSON.parse(request.body.read)
-      rescue JSON::ParseError
+      rescue JSON::ParserError
         return error_400('Invalid JSON given.')
       end
 
@@ -91,7 +96,9 @@ module KumonosSds
         @storage.delete(params[:service_name], host)
       end
 
-      return 201
+      content_type :json
+      status 201
+      {}.to_json
     end
   end
 end
