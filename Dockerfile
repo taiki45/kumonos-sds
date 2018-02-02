@@ -1,4 +1,4 @@
-FROM ruby:2.4
+FROM ruby:2.5
 
 RUN gem i bundler --no-doc
 RUN mkdir /app

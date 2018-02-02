@@ -1,4 +1,11 @@
 RSpec.describe KumonosSds::Host do
+  specify 'from_hash' do
+    host_hash = JSON.parse({ ip_address: '10.10.10.1', port: 8080 }.to_json)
+    host = KumonosSds::Host.from_hash(host_hash)
+    expect(host.ip_address).to eq('10.10.10.1')
+    expect(host.port).to eq(8080)
+  end
+
   specify 'identity' do
     a = KumonosSds::Host.new('10.10.10.2', 3000)
     b = KumonosSds::Host.new('10.10.10.2', 3000)

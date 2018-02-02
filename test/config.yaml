@@ -7,14 +7,14 @@ dynamic_resources:
       cluster_names:
       - nginx
       refresh_delay:
-        seconds: 30
+        seconds: 10
   deprecated_v1:
     sds_config:
       api_config_source:
         cluster_names:
           - sds
         refresh_delay:
-          seconds: 30
+          seconds: 3
 static_resources:
   listeners:
   - address:
@@ -38,7 +38,7 @@ static_resources:
                 cluster_names:
                 - nginx
                 refresh_delay:
-                  seconds: 30
+                  seconds: 10
             route_config_name: default
           http_filters:
           - name: envoy.router
