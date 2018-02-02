@@ -2,7 +2,7 @@ module KumonosSds
   # Host
   Host = Struct.new(:ip_address, :port, :az, :canary, :load_balancing_weight) do
     def self.from_hash(h)
-      new(*h.slice(*members).values)
+      new(*h.slice(*members.map(&:to_s)).values)
     end
 
     def tags
